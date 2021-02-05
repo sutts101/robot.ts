@@ -1,0 +1,17 @@
+{
+  "name": "robot.ts",
+  "version": "0.0.1",
+  "description": "Mars Rover I mean robots",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "sutts101",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.0",
+    "typescript": "^4.1.3"
+  }
+}
