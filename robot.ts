@@ -35,6 +35,9 @@ const directions = [Direction.N, Direction.E, Direction.S, Direction.W]
 const tx = (direction: Direction) : number => direction == Direction.E ? 1 : direction == Direction.W ? -1 : 0;
 const ty = (direction: Direction) : number => direction == Direction.N ? 1 : direction == Direction.S ? -1 : 0;
 
+const right = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + 1) % directions.length];
+const left = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + directions.length - 1) % directions.length];
+
 export class Robot {
   readonly grid: SquareGrid;
   readonly position: Position;
@@ -50,5 +53,7 @@ export class Robot {
   private canMove = () => this.grid.contains(this.futurePosition());
   
   move = () : Robot => this.canMove() ? new Robot(this.grid, this.futurePosition(), this.direction) : this;
+  rotateRight = () : Robot => new Robot(this.grid, this.position, right(this.direction));  
+  rotateLeft = () : Robot => new Robot(this.grid, this.position, left(this.direction));
   toString = () => `${this.position} ${this.direction}`
 }

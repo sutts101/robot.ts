@@ -47,5 +47,20 @@ describe('Robot', () => {
       expect(new Robot(grid, new Position(0, 1), Direction.W).move().toString()).toEqual('0,1 W')
     })
   })
+  describe('rotations', () => {
+    const north = new Robot(grid, new Position(1, 1), Direction.N);
+    test('rotateRight', () => {
+      expect(north.rotateRight().direction).toEqual(Direction.E);
+      expect(north.rotateRight().rotateRight().direction).toEqual(Direction.S);
+      expect(north.rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.W);
+      expect(north.rotateRight().rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.N);
+    })
+    test('rotateLeft', () => {
+      expect(north.rotateLeft().direction).toEqual(Direction.W);
+      expect(north.rotateLeft().rotateLeft().direction).toEqual(Direction.S);
+      expect(north.rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.E);
+      expect(north.rotateLeft().rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.N);
+    })
+  })
 })
 
