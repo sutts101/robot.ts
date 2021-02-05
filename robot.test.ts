@@ -1,4 +1,4 @@
-import {Position, SquareGrid} from './robot'
+import {Position, SquareGrid, Direction, Robot} from './robot'
 
 describe('Position', () => {
   describe('translate', () => {
@@ -30,3 +30,22 @@ describe('SquareGrid', () => {
     })
   })
 })
+
+describe('Robot', () => {
+  const grid = new SquareGrid(3);
+  describe('move', () => {
+    test('when the robot CAN move - moves', () => {
+      expect(new Robot(grid, new Position(1, 1), Direction.N).move().toString()).toEqual('1,2 N')
+      expect(new Robot(grid, new Position(1, 1), Direction.E).move().toString()).toEqual('2,1 E')
+      expect(new Robot(grid, new Position(1, 1), Direction.S).move().toString()).toEqual('1,0 S')
+      expect(new Robot(grid, new Position(1, 1), Direction.W).move().toString()).toEqual('0,1 W')
+    })
+    test('when the robot can NOT move - stays put', () => {
+      expect(new Robot(grid, new Position(1, 2), Direction.N).move().toString()).toEqual('1,2 N')
+      expect(new Robot(grid, new Position(2, 1), Direction.E).move().toString()).toEqual('2,1 E')
+      expect(new Robot(grid, new Position(1, 0), Direction.S).move().toString()).toEqual('1,0 S')
+      expect(new Robot(grid, new Position(0, 1), Direction.W).move().toString()).toEqual('0,1 W')
+    })
+  })
+})
+
