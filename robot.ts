@@ -99,9 +99,19 @@ export class StringyDriver {
   constructor() {
     this.commandHandler.register('REPORT', 0, () => this.log.push(this.status()))
     this.commandHandler.register('PLACE', 3, (x: string, y: string, directionString: string) => {
-      const position = new Position(parseInt(x), parseInt(y))
+      const safeParseInt = (s: string) : number => {
+        const value = parseInt(s)
+        if (isNaN(value)) {
+          throw new Error(`${s} is not a number`)
+        }
+        return value
+      }
+      const position = new Position(safeParseInt(x), safeParseInt(y))
       if (this.grid.contains(position)) {
         const direction = directions.find((d) => d.toString() == directionString)
+        if (!direction) {
+          throw new Error(`${directionString} is not a direction`)
+        }
         this.robot = new Robot(this.grid, position, direction)
       }
     })

@@ -115,6 +115,18 @@ describe('StringyDriver', () => {
       
       expect(subject.log).toEqual(['no robot'])
     })
+    test('bad position args - complains vociferously', () => {
+      expect(() => subject.perform('PLACE a,5,N')).toThrow('a is not a number')
+      expect(() => subject.perform('PLACE 5,b,N')).toThrow('b is not a number')
+    })
+    test('bad direction arg - complains vociferously', () => {
+      expect(() => subject.perform('PLACE 3,3,X')).toThrow('X is not a direction')
+    })
+    test('wrong number of args - complains vociferously', () => {
+      ['PLACE', 'PLACE 1', 'PLACE 3,3,N,ETC'].forEach((bad) => {
+        expect(() => subject.perform(bad)).toThrow(/Bad command/)
+      })
+    })
   }) 
   describe('REPORT', () => {
     test('no robot - reports no robt', () => {
