@@ -208,5 +208,28 @@ describe('StringyDriver', () => {
     test('complains vociferously', () => {
       expect(() => subject.perform('MOVE 27')).toThrow(/Bad command/)
     })
-  }) 
+  })
+  describe('flows', () => {
+    const perform = (actions: string[]) => {
+      actions.forEach((action) => {
+        subject.perform(action)
+        subject.perform('REPORT')
+      })
+    }
+    test('flow 1', () => {
+      perform(['PLACE 0,0,S', 'MOVE', 'RIGHT', 'MOVE', 'RIGHT', 'MOVE', 'MOVE', 'LEFT', 'MOVE'])
+
+      expect(subject.log).toEqual(['0 0 S', '0 0 S', '0 0 W', '0 0 W', '0 0 N', '0 1 N', '0 2 N', '0 2 W', '0 2 W'])
+    })
+    test('flow 2', () => {
+      perform(['PLACE 4,4,E', 'MOVE', 'RIGHT', 'MOVE', 'PLACE 2,2,N', 'MOVE'])
+
+      expect(subject.log).toEqual(['4 4 E', '4 4 E', '4 4 S', '4 3 S', '2 2 N', '2 3 N'])
+    })
+    test('flow 3', () => {
+      perform(['MOVE', 'RIGHT', 'MOVE', 'PLACE 2,2,N', 'MOVE'])
+
+      expect(subject.log).toEqual(['no robot', 'no robot', 'no robot', '2 2 N', '2 3 N'])
+    })
+  })
 })
