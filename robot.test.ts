@@ -1,4 +1,4 @@
-import {Position, SquareGrid, Direction, Robot} from './robot'
+import {Position, SquareGrid, Direction, Robot, StringyCommandHandler} from './robot'
 
 describe('Position', () => {
   describe('translate', () => {
@@ -64,3 +64,34 @@ describe('Robot', () => {
   })
 })
 
+describe('StringyCommandHandler', () => {
+  var subject: StringyCommandHandler;
+  beforeEach(() => {
+    subject = new StringyCommandHandler();
+    subject.register('foo', 0, () => 'called foo');
+    subject.register('bar', 1, (arg1: string) => `called bar with ${arg1}`);
+    subject.register('baz', 2, (arg1: string, arg2: string) => `called baz with ${arg1}, ${arg2}`);
+  })
+  describe('for commands with NO args', () => {
+    test('no args passed - handles', () => {
+      expect(subject.handle('foo')).toEqual('called foo')
+    })
+    test('args passed - complains', () => {
+      expect(() => subject.handle('foo green')).toThrow('Bad command: Expected 1 command token but got 2')
+    })
+  }) 
+  describe('for commands WITH args', () => {
+    test('correct number of args passed - handles', () => {
+      expect(subject.handle('bar red')).toEqual('called bar with red')
+      expect(subject.handle('baz red,green')).toEqual('called baz with red, green')
+    })
+    test('incorrect number of args passed - complains', () => {
+      expect(() => subject.handle('bar red,green')).toThrow('Bad command: Expected 1 arg token(s) but got 2')
+      expect(() => subject.handle('baz red')).toThrow('Bad command: Expected 2 arg token(s) but got 1')
+    })
+    test('no args passed - complains', () => {
+      expect(() => subject.handle('bar')).toThrow('Bad command: Expected 2 command tokens but got 1')
+      expect(() => subject.handle('baz')).toThrow('Bad command: Expected 2 command tokens but got 1')
+    })
+  }) 
+})

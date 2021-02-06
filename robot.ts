@@ -57,3 +57,36 @@ export class Robot {
   rotateLeft = () : Robot => new Robot(this.grid, this.position, left(this.direction));
   toString = () => `${this.position} ${this.direction}`
 }
+
+export class StringyCommandHandler {
+  private readonly handlers = {}
+
+  register(name: string, numArgs: number, handler: Function) {
+    this.handlers[name] = {numArgs, handler}
+  }
+
+  handle(stringyCommand: string) {
+    const complainUnless = (info: string, assertion: Function) => {
+      if (!assertion()) {
+        throw new Error(`Bad command: ${info}`)
+      }
+    }
+
+    const tokens = stringyCommand.split(' ')
+    const meta = this.handlers[tokens[0]]
+    if (meta) {
+      if (meta.numArgs == 0) {
+        complainUnless(`Expected 1 command token but got ${tokens.length}`, () => tokens.length == 1)
+        console.log('handler', meta.handler)
+        return meta.handler()
+      } else {
+        complainUnless(`Expected 2 command tokens but got ${tokens.length}`, () => tokens.length == 2)
+        const args = tokens[1].split(',')
+        complainUnless(`Expected ${meta.numArgs} arg token(s) but got ${args.length}`, () => args.length == meta.numArgs)
+        return meta.handler(...args)
+      }
+    } else {
+      throw new Error(`Unknown command: ${stringyCommand}`)
+    }
+  }
+}
