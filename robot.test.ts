@@ -103,7 +103,7 @@ describe('StringyDriver', () => {
     expect(subject.grid.size).toEqual(5)
   })
   describe('PLACE', () => {
-    test('legit args - in bounds - places new rob0t', () => {
+    test('legit args - in bounds - places new robot', () => {
       subject.perform('PLACE 1,1,N')
       subject.perform('REPORT')
       
@@ -126,6 +126,28 @@ describe('StringyDriver', () => {
       ['PLACE', 'PLACE 1', 'PLACE 3,3,N,ETC'].forEach((bad) => {
         expect(() => subject.perform(bad)).toThrow(/Bad command/)
       })
+    })
+  }) 
+  describe('MOVE', () => {
+    test('can move - moves', () => {
+      subject.perform('PLACE 1,1,N')
+      subject.perform('MOVE')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['1 2 N'])
+    })
+    test('can NOT move - noes nothing', () => {
+      subject.perform('PLACE 0,0,S')
+      subject.perform('MOVE')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['0 0 S'])
+    })
+    test('no robot - noes nothing', () => {
+      subject.perform('MOVE')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['no robot'])
     })
   }) 
   describe('REPORT', () => {
