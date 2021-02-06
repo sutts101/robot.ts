@@ -99,6 +99,8 @@ export class StringyDriver {
   constructor() {
     this.commandHandler.register('REPORT', 0, () => this.log.push(this.status()))
     this.commandHandler.register('MOVE', 0, () => this.robot = this.robot?.move())
+    this.commandHandler.register('LEFT', 0, () => this.robot = this.robot?.rotateLeft())
+    this.commandHandler.register('RIGHT', 0, () => this.robot = this.robot?.rotateRight())
     this.commandHandler.register('PLACE', 3, (x: string, y: string, directionString: string) => {
       const safeParseInt = (s: string) : number => {
         const value = parseInt(s)

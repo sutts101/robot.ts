@@ -150,6 +150,36 @@ describe('StringyDriver', () => {
       expect(subject.log).toEqual(['no robot'])
     })
   }) 
+  describe('LEFT', () => {
+    test('has robot - rotates left', () => {
+      subject.perform('PLACE 1,1,N')
+      subject.perform('LEFT')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['1 1 W'])
+    })
+    test('no robot - noes nothing', () => {
+      subject.perform('LEFT')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['no robot'])
+    })
+  }) 
+  describe('RIGHT', () => {
+    test('has robot - rotates left', () => {
+      subject.perform('PLACE 1,1,N')
+      subject.perform('RIGHT')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['1 1 E'])
+    })
+    test('no robot - noes nothing', () => {
+      subject.perform('RIGHT')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['no robot'])
+    })
+  }) 
   describe('REPORT', () => {
     test('no robot - reports no robt', () => {
       subject.perform('REPORT')
