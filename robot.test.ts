@@ -93,7 +93,12 @@ describe('StringyCommandHandler', () => {
       expect(() => subject.handle('bar')).toThrow('Bad command: Expected 2 command tokens but got 1')
       expect(() => subject.handle('baz')).toThrow('Bad command: Expected 2 command tokens but got 1')
     })
-  }) 
+  })
+  describe('for unknown command', () => {
+    test('complains', () => {
+      expect(() => subject.handle('banana')).toThrow('Unknown command: banana')
+    })
+  })
 })
 
 describe('StringyDriver', () => {
@@ -108,6 +113,13 @@ describe('StringyDriver', () => {
       subject.perform('REPORT')
       
       expect(subject.log).toEqual(['1 1 N'])
+    })
+    test('legit args - in bounds - existing robot - replaces', () => {
+      subject.perform('PLACE 1,1,N')
+      subject.perform('PLACE 2,2,S')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['2 2 S'])
     })
     test('legit args - NOT in bounds - does nothing', () => {
       subject.perform('PLACE 10,1,N')
@@ -185,6 +197,16 @@ describe('StringyDriver', () => {
       subject.perform('REPORT')
       
       expect(subject.log).toEqual(['no robot'])
+    })
+  }) 
+  describe('unknown command', () => {
+    test('complains vociferously', () => {
+      expect(() => subject.perform('UNKNOWN')).toThrow(/Unknown command/)
+    })
+  }) 
+  describe('non-PLACE command with args', () => {
+    test('complains vociferously', () => {
+      expect(() => subject.perform('MOVE 27')).toThrow(/Bad command/)
     })
   }) 
 })
