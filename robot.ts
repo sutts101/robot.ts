@@ -12,14 +12,14 @@ export class Position {
 }
 
 export class SquareGrid {
-  readonly size: number;
+  readonly size: number
 
   constructor(size: number) {
-    this.size = size;
+    this.size = size
   }
 
   contains(position: Position): boolean {
-    return position.x >= 0 && position.x < this.size && position.y >= 0 && position.y < this.size; 
+    return position.x >= 0 && position.x < this.size && position.y >= 0 && position.y < this.size 
   }
 }
 
@@ -32,29 +32,29 @@ export enum Direction {
 
 const directions = [Direction.N, Direction.E, Direction.S, Direction.W]
 
-const tx = (direction: Direction) : number => direction == Direction.E ? 1 : direction == Direction.W ? -1 : 0;
-const ty = (direction: Direction) : number => direction == Direction.N ? 1 : direction == Direction.S ? -1 : 0;
+const tx = (direction: Direction) : number => direction == Direction.E ? 1 : direction == Direction.W ? -1 : 0
+const ty = (direction: Direction) : number => direction == Direction.N ? 1 : direction == Direction.S ? -1 : 0
 
-const right = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + 1) % directions.length];
-const left = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + directions.length - 1) % directions.length];
+const right = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + 1) % directions.length]
+const left = (direction: Direction) : Direction => directions[(directions.indexOf(direction) + directions.length - 1) % directions.length]
 
 export class Robot {
-  readonly grid: SquareGrid;
-  readonly position: Position;
-  readonly direction: Direction;
+  readonly grid: SquareGrid
+  readonly position: Position
+  readonly direction: Direction
 
   constructor(grid: SquareGrid, position: Position, direction: Direction) {
-    this.grid = grid;
-    this.position = position;
-    this.direction = direction;
+    this.grid = grid
+    this.position = position
+    this.direction = direction
   }
 
-  private futurePosition = () => this.position.translate(tx(this.direction), ty(this.direction));
-  private canMove = () => this.grid.contains(this.futurePosition());
+  private futurePosition = () => this.position.translate(tx(this.direction), ty(this.direction))
+  private canMove = () => this.grid.contains(this.futurePosition())
   
-  move = () : Robot => this.canMove() ? new Robot(this.grid, this.futurePosition(), this.direction) : this;
-  rotateRight = () : Robot => new Robot(this.grid, this.position, right(this.direction));  
-  rotateLeft = () : Robot => new Robot(this.grid, this.position, left(this.direction));
+  move = () : Robot => this.canMove() ? new Robot(this.grid, this.futurePosition(), this.direction) : this
+  rotateRight = () : Robot => new Robot(this.grid, this.position, right(this.direction))  
+  rotateLeft = () : Robot => new Robot(this.grid, this.position, left(this.direction))
   toString = () => `${this.position} ${this.direction}`
 }
 
@@ -88,5 +88,23 @@ export class StringyCommandHandler {
     } else {
       throw new Error(`Unknown command: ${stringyCommand}`)
     }
+  }
+}
+
+export class StringyDriver {
+  private readonly commandHandler: StringyCommandHandler
+  readonly log = []
+
+  constructor() {
+    this.commandHandler = new StringyCommandHandler()
+    this.commandHandler.register('REPORT', 0, () => this.log.push(this.status()))
+  }
+
+  perform(command: string){
+    this.commandHandler.handle(command)
+  } 
+
+  status() : string {
+    return 'no robot'
   }
 }

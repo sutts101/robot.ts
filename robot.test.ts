@@ -1,4 +1,4 @@
-import {Position, SquareGrid, Direction, Robot, StringyCommandHandler} from './robot'
+import {Position, SquareGrid, Direction, Robot, StringyCommandHandler, StringyDriver} from './robot'
 
 describe('Position', () => {
   describe('translate', () => {
@@ -32,7 +32,7 @@ describe('SquareGrid', () => {
 })
 
 describe('Robot', () => {
-  const grid = new SquareGrid(3);
+  const grid = new SquareGrid(3)
   describe('move', () => {
     test('when the robot CAN move - moves', () => {
       expect(new Robot(grid, new Position(1, 1), Direction.N).move().toString()).toEqual('1,2 N')
@@ -48,29 +48,29 @@ describe('Robot', () => {
     })
   })
   describe('rotations', () => {
-    const north = new Robot(grid, new Position(1, 1), Direction.N);
+    const north = new Robot(grid, new Position(1, 1), Direction.N)
     test('rotateRight', () => {
-      expect(north.rotateRight().direction).toEqual(Direction.E);
-      expect(north.rotateRight().rotateRight().direction).toEqual(Direction.S);
-      expect(north.rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.W);
-      expect(north.rotateRight().rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.N);
+      expect(north.rotateRight().direction).toEqual(Direction.E)
+      expect(north.rotateRight().rotateRight().direction).toEqual(Direction.S)
+      expect(north.rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.W)
+      expect(north.rotateRight().rotateRight().rotateRight().rotateRight().direction).toEqual(Direction.N)
     })
     test('rotateLeft', () => {
-      expect(north.rotateLeft().direction).toEqual(Direction.W);
-      expect(north.rotateLeft().rotateLeft().direction).toEqual(Direction.S);
-      expect(north.rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.E);
-      expect(north.rotateLeft().rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.N);
+      expect(north.rotateLeft().direction).toEqual(Direction.W)
+      expect(north.rotateLeft().rotateLeft().direction).toEqual(Direction.S)
+      expect(north.rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.E)
+      expect(north.rotateLeft().rotateLeft().rotateLeft().rotateLeft().direction).toEqual(Direction.N)
     })
   })
 })
 
 describe('StringyCommandHandler', () => {
-  var subject: StringyCommandHandler;
+  var subject: StringyCommandHandler
   beforeEach(() => {
-    subject = new StringyCommandHandler();
-    subject.register('foo', 0, () => 'called foo');
-    subject.register('bar', 1, (arg1: string) => `called bar with ${arg1}`);
-    subject.register('baz', 2, (arg1: string, arg2: string) => `called baz with ${arg1}, ${arg2}`);
+    subject = new StringyCommandHandler()
+    subject.register('foo', 0, () => 'called foo')
+    subject.register('bar', 1, (arg1: string) => `called bar with ${arg1}`)
+    subject.register('baz', 2, (arg1: string, arg2: string) => `called baz with ${arg1}, ${arg2}`)
   })
   describe('for commands with NO args', () => {
     test('no args passed - handles', () => {
@@ -92,6 +92,18 @@ describe('StringyCommandHandler', () => {
     test('no args passed - complains', () => {
       expect(() => subject.handle('bar')).toThrow('Bad command: Expected 2 command tokens but got 1')
       expect(() => subject.handle('baz')).toThrow('Bad command: Expected 2 command tokens but got 1')
+    })
+  }) 
+})
+
+describe('StringyDriver', () => {
+  var subject: StringyDriver
+  beforeEach(() => subject = new StringyDriver())
+  describe('REPORT', () => {
+    test('no robot - reports no robt', () => {
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['no robot'])
     })
   }) 
 })
