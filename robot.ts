@@ -77,7 +77,6 @@ export class StringyCommandHandler {
     if (meta) {
       if (meta.numArgs == 0) {
         complainUnless(`Expected 1 command token but got ${tokens.length}`, () => tokens.length == 1)
-        console.log('handler', meta.handler)
         return meta.handler()
       } else {
         complainUnless(`Expected 2 command tokens but got ${tokens.length}`, () => tokens.length == 2)
@@ -92,17 +91,19 @@ export class StringyCommandHandler {
 }
 
 export class StringyDriver {
-  private readonly grid = new SquareGrid(5);
-  private readonly commandHandler = new StringyCommandHandler()
+  readonly grid = new SquareGrid(5);
   readonly log = []
+  private readonly commandHandler = new StringyCommandHandler()
   private robot: Robot
 
   constructor() {
     this.commandHandler.register('REPORT', 0, () => this.log.push(this.status()))
     this.commandHandler.register('PLACE', 3, (x: string, y: string, directionString: string) => {
       const position = new Position(parseInt(x), parseInt(y))
-      const direction = directions.find((d) => d.toString() == directionString)
-      this.robot = new Robot(this.grid, position, direction)
+      if (this.grid.contains(position)) {
+        const direction = directions.find((d) => d.toString() == directionString)
+        this.robot = new Robot(this.grid, position, direction)
+      }
     })
   }
 

@@ -99,12 +99,21 @@ describe('StringyCommandHandler', () => {
 describe('StringyDriver', () => {
   var subject: StringyDriver
   beforeEach(() => subject = new StringyDriver())
+  test('has a hard-wired grid size so it does', () => {
+    expect(subject.grid.size).toEqual(5)
+  })
   describe('PLACE', () => {
-    test('legit args - in bounds - places new robt', () => {
+    test('legit args - in bounds - places new rob0t', () => {
       subject.perform('PLACE 1,1,N')
       subject.perform('REPORT')
       
       expect(subject.log).toEqual(['1 1 N'])
+    })
+    test('legit args - NOT in bounds - does nothing', () => {
+      subject.perform('PLACE 10,1,N')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['no robot'])
     })
   }) 
   describe('REPORT', () => {
