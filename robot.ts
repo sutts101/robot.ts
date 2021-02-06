@@ -92,12 +92,18 @@ export class StringyCommandHandler {
 }
 
 export class StringyDriver {
-  private readonly commandHandler: StringyCommandHandler
+  private readonly grid = new SquareGrid(5);
+  private readonly commandHandler = new StringyCommandHandler()
   readonly log = []
+  private robot: Robot
 
   constructor() {
-    this.commandHandler = new StringyCommandHandler()
     this.commandHandler.register('REPORT', 0, () => this.log.push(this.status()))
+    this.commandHandler.register('PLACE', 3, (x: string, y: string, directionString: string) => {
+      const position = new Position(parseInt(x), parseInt(y))
+      const direction = directions.find((d) => d.toString() == directionString)
+      this.robot = new Robot(this.grid, position, direction)
+    })
   }
 
   perform(command: string){
@@ -105,6 +111,6 @@ export class StringyDriver {
   } 
 
   status() : string {
-    return 'no robot'
+    return this.robot ? [this.robot.position.x, this.robot.position.y, this.robot.direction].join(' ') : 'no robot'
   }
 }

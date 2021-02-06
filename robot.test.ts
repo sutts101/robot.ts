@@ -99,6 +99,14 @@ describe('StringyCommandHandler', () => {
 describe('StringyDriver', () => {
   var subject: StringyDriver
   beforeEach(() => subject = new StringyDriver())
+  describe('PLACE', () => {
+    test('legit args - in bounds - places new robt', () => {
+      subject.perform('PLACE 1,1,N')
+      subject.perform('REPORT')
+      
+      expect(subject.log).toEqual(['1 1 N'])
+    })
+  }) 
   describe('REPORT', () => {
     test('no robot - reports no robt', () => {
       subject.perform('REPORT')
