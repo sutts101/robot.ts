@@ -71,7 +71,6 @@ export class StringyCommandHandler {
         throw new Error(`Bad command: ${info}`)
       }
     }
-
     const tokens = stringyCommand.split(' ')
     const meta = this.handlers[tokens[0]]
     if (meta) {
@@ -91,7 +90,7 @@ export class StringyCommandHandler {
 }
 
 export class StringyDriver {
-  readonly grid = new SquareGrid(5);
+  readonly grid = new SquareGrid(5)
   readonly log = []
   private readonly commandHandler = new StringyCommandHandler()
   private robot: Robot
@@ -120,11 +119,6 @@ export class StringyDriver {
     })
   }
 
-  perform(command: string){
-    this.commandHandler.handle(command)
-  } 
-
-  status() : string {
-    return this.robot ? [this.robot.position.x, this.robot.position.y, this.robot.direction].join(' ') : 'no robot'
-  }
+  perform = (command: string) => this.commandHandler.handle(command)
+  status = () : string => this.robot ? [this.robot.position.x, this.robot.position.y, this.robot.direction].join(' ') : 'no robot'
 }

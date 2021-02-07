@@ -178,7 +178,7 @@ describe('StringyDriver', () => {
     })
   }) 
   describe('RIGHT', () => {
-    test('has robot - rotates left', () => {
+    test('has robot - rotates right', () => {
       subject.perform('PLACE 1,1,N')
       subject.perform('RIGHT')
       subject.perform('REPORT')
